@@ -72,6 +72,54 @@ const run = async() => {
     
           });
 
+          app.get('/prings', async (req, res) => {
+            const query = {};
+            const cursor = postCollection.find(query);
+    
+            const results = await cursor.toArray();
+            
+            if(results) {
+              res.json(results);
+            }
+    
+            else {
+              res.send([]);
+            }
+    
+          });
+
+          app.get('/prings/:email', async (req, res) => {
+            const { email } = req.params;
+            const query = { email: email };
+            
+            const cursor = postCollection.find(query);
+    
+            const results = await cursor.toArray();
+    
+            if(results) {
+                res.json(results);
+            }
+    
+            else {
+                res.send([]);
+            }
+  
+          });
+
+          app.delete('/prings/:id', async (req, res) => {
+            const { id } = req.params;
+            const query = { _id: ObjectId(id) };
+    
+            const result = await postCollection.deleteOne(query);
+            res.json(result);
+          });
+
+          app.post('/prings', async (req, res) => {
+            const newOrder = req.body;
+            const result = await postCollection.insertOne(newOrder);
+            res.json(result);
+          });
+
     } finally {
 
     }
